@@ -33,9 +33,16 @@ app.post("/books", async (req, res) => {
     }
 });
 
-app.get("/", (req, res) => {
-    console.log(req);
-    return res.status(200).send("Welcome to the Mern Stack?, How its going on");
+
+app.get("/allbooks", async (req, res) => {
+    try{
+        const books = await Book.find({});
+        return res.status(200).json(books);
+    }
+    catch(error){
+        console.log(error.message);
+        res.status(500).send({message:error.message});
+    }
 })
 app.listen(PORT, () => {
     console.log(`App is listening to PORT: ${PORT}`);
