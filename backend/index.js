@@ -37,13 +37,35 @@ app.post("/books", async (req, res) => {
 app.get("/allbooks", async (req, res) => {
     try{
         const books = await Book.find({});
-        return res.status(200).json(books);
+        return res.status(200).json({
+            count: books.length,
+            data: books
+        });
     }
     catch(error){
         console.log(error.message);
         res.status(500).send({message:error.message});
     }
 })
+
+
+app.get("/book/:id", async (req, res) => {
+    try{
+        const {id} = req.params;
+        const book = await Book.findById(id);
+
+        if(!book){
+            return res.status(404).send({message:"Book Not Found"});
+        }
+        return res.status(200).json(book);
+    }
+    catch(error){
+        console.log(error.message);
+        res.status.send({message:error.message});
+    }
+})
+
+
 app.listen(PORT, () => {
     console.log(`App is listening to PORT: ${PORT}`);
 });
